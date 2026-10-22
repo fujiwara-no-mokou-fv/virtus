@@ -1,18 +1,31 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
-#include"decoder.h"
+#include<string.h>
+#include"../inc/cpu.h"
+#include"../inc/rv_cpu.h"
+#include"../inc/rv_dec.h"
 
 
 
-uint32_t i = 0b000000000000'00011'000'01000'0110011ull; // addi x8 x3 1
+const uint32_t instr = 0b0000000'00100'00101'000'00001'0110011;
 
 int main () {
-  printf("opcode =%#x\n",getf(OP, i));
-  printf("rd =\tx%d\n",getf(RD, i));
-  printf("func3 =\t%#x\n",getf(F3, i));
-  printf("rs1 =\tx%d\n",getf(RS1, i));
-  printf("imm =\t%d\n",dec_imm_i(i));
-  //printf("func7 =\t%#x\n",getf(F7, i));
+  rv_cpu_arch_desc_t rv32i_desc = {
+    .dec = (dec_t)&rv_dec,
+    .mem_sz = 4096U,
+    .pc = 256U
+  };
+  cpu_t rv32i;
+  cpu_arch_t rv32i_arch = {
+    .desc = (cpu_arch_desc_t)&rv32i_desc,
+    .init = init_rv_cpu,
+    .exec = exec_rv_cpu,
+    .free = free_rv_cpu
+  };
+  init_cpu(&rv32i, &rv32i_arch);
+  memcpy(&(((rv_cpu_state_t *)(rv32i.state))->mem[256U]), &instr, sizeof instr);
+  exec_cpu(&rv32i);
+  free_cpu(&rv32i);
   return 0;
 }
