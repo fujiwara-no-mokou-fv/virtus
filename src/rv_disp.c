@@ -1,7 +1,7 @@
 #include<stdint.h>
 #include<string.h>
 #include"../inc/rv_cpu.h"
-#include"../inc/rv_dec.h"
+#include"../inc/rv_disp.h"
 #include"../inc/rv_types.h"
 
 
