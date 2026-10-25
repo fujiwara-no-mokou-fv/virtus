@@ -1,7 +1,7 @@
 #include<stdint.h>
 #include<stdlib.h>
 #include"../inc/rv_cpu.h"
-#include"../inc/rv_dec.h"
+#include"../inc/rv_types.h"
 
 
 
@@ -43,22 +43,21 @@ void init_rv_cpu(cpu_state_t *state, cpu_arch_desc_t desc) {
   }
   rv_state->pc = rv_desc->pc;
 
-  if(rv_desc->dec == nullptr) {
+  if(rv_desc->dispatcher == nullptr) {
   free(rv_state->mem);
   free(rv_state);
   *state = nullptr;
   return;
   }
-  rv_state->dec = rv_desc->dec;
+  rv_state->dispatcher = rv_desc->dispatcher;
   
   *state = (cpu_state_t)rv_state;
 }
-/* !!! */
+
 void exec_rv_cpu(cpu_state_t state) {
   auto rv_state = (rv_cpu_state_t *)state;
   rv_instr_t first_instr = fetch_rv_instr(rv_state);
-  auto dec = (rv_dec_t *)(rv_state->dec); 
-  dec->rv_handler[get_rv_field(first_instr, OP).opcode.val](rv_state, first_instr);
+  rv_state->dispatcher(state, first_instr);
 }
 
 void free_rv_cpu(cpu_state_t state) {

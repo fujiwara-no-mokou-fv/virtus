@@ -2,16 +2,16 @@
 #include<stdint.h>
 #include<string.h>
 #include"cpu.h"
-
+#include"rv_types.h"
 
 
 constexpr size_t CACHE_LINE = 64U;
 constexpr size_t MEM_PAGE = 2048U;
 
-typedef void *dec_t;
+typedef void (*rv_dispatch_t)(cpu_state_t state, rv_instr_t);
 
 typedef struct [[gnu::aligned(64)]] {
-  dec_t dec;
+  rv_dispatch_t dispatcher;
   uint8_t *mem;
   uint32_t x_reg [32];
   uint32_t pc;
@@ -20,7 +20,7 @@ typedef struct [[gnu::aligned(64)]] {
 constexpr size_t RV_CPU_STATE_SZ = sizeof(rv_cpu_state_t);
 
 typedef struct {
-  dec_t dec;
+  rv_dispatch_t dispatcher;
   uint32_t mem_sz;
   uint32_t pc;
 } rv_cpu_arch_desc_t;
