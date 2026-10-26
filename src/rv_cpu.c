@@ -5,13 +5,6 @@
 
 
 
-[[gnu::always_inline]] static inline rv_instr_t fetch_rv_instr(rv_cpu_state_t *state) {
-  rv_instr_t instr;
-  state->x_reg[0] = 0;
-  memcpy(&instr.raw, &state->mem[state->pc], sizeof(uint32_t));
-  return instr;
-}
-
 void init_rv_cpu(cpu_state_t *state, cpu_arch_desc_t desc) {
   auto rv_desc = (rv_cpu_arch_desc_t *)desc;
   rv_cpu_state_t *rv_state;
@@ -65,3 +58,5 @@ void free_rv_cpu(cpu_state_t state) {
   free(rv_state->mem);
   free(rv_state);
 }
+
+

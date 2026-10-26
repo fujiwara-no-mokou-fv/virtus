@@ -17,3 +17,5 @@
 [[gnu::always_inline]] static inline rv_i_imm_t extr_i_imm (rv_imm_t imm) {
   return (rv_i_imm_t){.val = (int32_t)(imm.raw << 20) >> 20};
 }
+
+void rv_32i_dispatcher (cpu_state_t state, rv_instr_t instr);

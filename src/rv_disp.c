@@ -6,15 +6,6 @@
 
 
 
-[[gnu::always_inline]] static inline rv_instr_t fetch_rv_instr(
-    rv_cpu_state_t *state) {
-
-  rv_instr_t instr;
-  memcpy(&instr.raw, &state->mem[state->pc], sizeof(rv_instr_t));
-  
-  return instr;
-}
-
 void halt(cpu_state_t state, rv_instr_t instr) {
   return;
 }
